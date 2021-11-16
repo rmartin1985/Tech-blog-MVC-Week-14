@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const { Post, User, Comment } = require('../../models');
-const sequelize = require('../../config/connection');
 
 // GET all posts
 router.get('/', (req, res) => {
@@ -80,6 +79,20 @@ router.get('/:id', (req, res) => {
         }
         res.json(dbPostData);
     })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+    });
+});
+
+// CREATE a new post route
+router.post('/', (req, res) => {
+    Post.create({
+        title: req.body.title,
+        content: req.body.content,
+        user_id: req.session.user_id
+    })
+    .then(dbPostData => res.json(dbPostData))
     .catch(err => {
         console.log(err);
         res.status(500).json(err);
