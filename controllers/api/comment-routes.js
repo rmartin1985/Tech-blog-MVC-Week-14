@@ -6,11 +6,25 @@ router.get('/', (req, res) => {
     Comment.findAll({
         attributes: ['comment_content']
     })
-    .then(dbCommentData => res.json(dbCommentData))
-    .catch(err => {
-        console.log(err);
-        res.status(500).json(err)
-    });
+        .then(dbCommentData => res.json(dbCommentData))
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err)
+        });
+});
+
+// GET one comment
+router.get('/:id', (req, res) => {
+    Comment.findAll({
+        where: {
+            id: req.params.id
+        }
+    })
+        .then(dbCommentData => res.json(dbCommentData))
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        });
 });
 
 
