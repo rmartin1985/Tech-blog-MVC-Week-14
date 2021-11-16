@@ -33,7 +33,7 @@ router.get('/:id', (req, res) => {
             {
                 model: Comment,
                 attributes: [
-                    'id', 
+                    'id',
                     'comment_content',
                     'created_at'
                 ],
@@ -48,17 +48,17 @@ router.get('/:id', (req, res) => {
             }
         ]
     })
-    .then(dbUserData => {
-        if (!dbUserData) {
-            res.status(404).json({ message: "No user found matching this id" });
-            return;
-        }
-        res.json(dbUserData);
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
-    });
+        .then(dbUserData => {
+            if (!dbUserData) {
+                res.status(404).json({ message: "No user found matching this id" });
+                return;
+            }
+            res.json(dbUserData);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        });
 });
 
 // CREATE a user route
@@ -67,17 +67,47 @@ router.post('/', (req, res) => {
         username: req.body.username,
         password: req.body.password
     })
-    .then(dbUserData => {
-        req.session.save(() => {
-            req.session.user_id = dbUserData.id;
-            req.session.username = dbUserData.username;
-            req.session.loggedIn = true;
-            res.json(dbUserData);
+        .then(dbUserData => {
+            req.session.save(() => {
+                req.session.user_id = dbUserData.id;
+                req.session.username = dbUserData.username;
+                req.session.loggedIn = true;
+                res.json(dbUserData);
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
         });
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
-    });
 });
 
+// POST route for login
+router.post('/login', (req, res) => {
+    User.findOne({
+        where: {
+            username: req.body.username
+        }
+    })
+        .then(dbUserData => {
+            if (!dbUserData) {
+                res.status(400).json({ message: "No user found with that username." });
+                return;
+            }
+            const validPassword = dbUserData.checkPassword(req.body.password);
+
+            if (!validPassword) {
+                res.status(400).json({ message: "Password was incorrect. Please try again." });
+                return;
+            }
+            req.session.save(() => {
+                req.session.user_id = dbUserData.id;
+                req.session.username = dbUserData.username;
+                req.session.loggedIn = true;
+                res.json({ user: dbUserData, message: "You have successfully logged in!" });
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        });
+});
