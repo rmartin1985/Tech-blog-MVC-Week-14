@@ -6,7 +6,7 @@ router.get('/', (req, res) => {
     Post.findAll({
         order: [['created_at', 'DESC']],
         attributes: [
-            'id', 
+            'id',
             'title',
             'content',
             'created_at'
@@ -27,16 +27,16 @@ router.get('/', (req, res) => {
                 }
             },
             {
-                model: User, 
+                model: User,
                 attributes: ['username']
             }
-        ] 
+        ]
     })
-    .then(dbPostData => res.json(dbPostData))
-    .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
-    });
+        .then(dbPostData => res.json(dbPostData))
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        });
 });
 
 // GET one post by id
@@ -72,17 +72,17 @@ router.get('/:id', (req, res) => {
             }
         ]
     })
-    .then(dbPostData => {
-        if (!dbPostData) {
-            res.status(404).json({ message: "No post found matching that id." });
-            return;
-        }
-        res.json(dbPostData);
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
-    });
+        .then(dbPostData => {
+            if (!dbPostData) {
+                res.status(404).json({ message: "No post found matching that id." });
+                return;
+            }
+            res.json(dbPostData);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        });
 });
 
 // CREATE a new post route
@@ -92,9 +92,33 @@ router.post('/', (req, res) => {
         content: req.body.content,
         user_id: req.session.user_id
     })
-    .then(dbPostData => res.json(dbPostData))
-    .catch(err => {
-        console.log(err);
-        res.status(500).json(err);
-    });
+        .then(dbPostData => res.json(dbPostData))
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        });
 });
+
+// UPDATE a post route
+router.put('/:id', (req, res) => {
+    Post.update({
+        title: req.body.title,
+        content: req.body.content
+    },
+        {
+            where: {
+                id: req.params.id
+            }
+        })
+        .then(dbPostData => {
+            if(!dbPostData) {
+                res.status(404).json({ message: "No post found that matches that id." });
+                return;
+            }
+            res.json(dbPostData);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        });
+})
