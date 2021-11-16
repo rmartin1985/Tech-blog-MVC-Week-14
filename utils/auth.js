@@ -1,8 +1,8 @@
-const withAuth = (req, res, next0 => {
+const withAuth = (req, res, next => {
     if (!req.session.user_id) {
         res.redirect('/login');
     } else {
-        next0();
+        next();
     }
 });
 
