@@ -41,5 +41,29 @@ router.post('/', (req, res) => {
         });
 });
 
+// UPDATE a comment
+router.put('/:id', (req, res) => {
+    Comment.update({
+        comment_content: req.body.comment_content
+    },
+        {
+            where: {
+                id: req.params.id
+            }
+        })
+        .then(dbCommentData => {
+            if (!dbCommentData) {
+                res.status(404).json({ message: "No comment found that matches this id." });
+                return;
+            }
+            res.json(dbCommentData);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        });
+});
+
+
 
 module.exports = router;
