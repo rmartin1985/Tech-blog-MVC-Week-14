@@ -1,14 +1,13 @@
 <div class="card">
     <h3 class="card-header">Create New Post</h3>
-    <form class="card-body new-post-form" id="new-post-form">
+    <form class="card-body" id="new-post-form">
         <label for="post-title" class="form-label">Title</label>
         <input type="text" id="post-title" name="post-title" class="form-input" />
-
-
         <label class="form-label" for="content">Content</label>
-        <input id="content" name="content" class="form-input" />
-
-        <button type="submit" class="btn">Create</button>
+        <textarea rows="5" type="text" id="content" name="content" class="form-control"></textarea>
+        <div class="container">
+            <button type="submit" class="btn">Create</button>
+        </div>
     </form>
 </div>
 

@@ -1,16 +1,18 @@
 {{#if posts.length}}
 <section>
     <h2>Posts written by you</h2>
-        {{#each posts as |post|}}
-            {{> dashboard-post post}}
-        {{/each}}
+    {{#each posts as |post|}}
+    {{> dashboard-post post}}
+    {{/each}}
 </section>
 {{else}}
-    <section id="nopost">
-        <h1>You don't have any posts yet! Click the button bellow to get started.</h1>
-    </section>
+<section id="nopost">
+    <h1>You don't have any posts yet! Click the button bellow to get started.</h1>
+</section>
 {{/if}}
 
-<button type="submit" class="btn">
-    <a class="link" href="/dashboard/new">New Post</a>
-</button>
+<div class="container">
+    <button type="submit" class="btn" id="newpost-btn">
+        <a id="newlink" href="/dashboard/new">New Post</a>
+    </button>
+</div>
